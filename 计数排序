@@ -1,0 +1,75 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+bool coutingSort(int array[], size_t arrLen) {
+    if (arrLen < 2) {
+        return true;
+    }
+
+    //Find maximum and minimal value
+    int max = array[0];
+    int min = array[0];
+
+    for (size_t i = 1; i < arrLen; ++i)
+    {
+        if (min > array[i]) {
+            min = array[i];
+        }
+        else if (max < array[i]) {
+            max = array[i];
+        }
+    }
+
+    // Create counting buckets
+    int *countingBuckets = new int[max - min + 1]();
+
+    // Count number of values in array
+    for (size_t j = 0; j < arrLen; ++j)
+    {
+        ++countingBuckets[array[j] - min];
+    }
+
+    // Accumulate coutingBuckets to find the last ordered location of value in array
+    for (size_t k = 1; k < (max - min + 1); ++k)
+    {
+        countingBuckets[k] += countingBuckets[k-1];
+    }
+
+    //Traverse the array in reversed order
+    int *tempArray = new int[arrLen]();
+    for (int l = arrLen - 1; l >= 0; --l)
+    {
+        tempArray[--countingBuckets[array[l] - min]] = array[l];
+    }
+
+    for (size_t m = 0; m < arrLen; ++m)
+    {
+        array[m] = tempArray[m];
+    }
+
+    delete [] countingBuckets;
+    delete [] tempArray;
+
+    
+    return true;
+}
+
+void printArray(int array[], int arrLen) {
+    for (int i = 0; i < arrLen; ++i) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+int main()
+{
+	int a[10] = {104,413,13,62,61,374,8,53,32,194};
+	int length = sizeof(a)/sizeof(int);
+	cout << "排序前：" << endl;
+	printArray(a,length);
+	coutingSort(a,length);
+	cout << "\n\n排序后(计数排序)：" << endl;
+	printArray(a,length);
+	return 0;
+}
