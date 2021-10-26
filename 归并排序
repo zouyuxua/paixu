@@ -1,0 +1,81 @@
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+bool merge(int array[], size_t arrStart, size_t arrMiddle, size_t arrEnd) {
+    int arrLen = arrEnd - arrStart;
+    if (arrLen < 2) { //数组长度小于2，不需要排序 
+        cout << "Please check your implementation." << endl;
+        return false;
+    }
+
+    int *temp = new int(arrLen);  //定义一个临时数组 
+    int i = arrStart;
+    int j = arrMiddle;
+    int tempIndex = 0;
+
+    while (i < arrMiddle && j < arrEnd) {
+        if (array[i] > array[j]) {     
+            temp[tempIndex] = array[j];  //将左边的数组按升序合并进临时数组
+            ++j;
+        }
+        else {
+            temp[tempIndex] = array[i];  //将右边的数组按升序合并进临时数组
+            ++i;
+        }
+        ++tempIndex;   
+    }
+
+    while (i < arrMiddle) {
+        temp[tempIndex++] = array[i++];  //将左边剩余元素 按升序合并进临时数组 
+    }
+
+    while (j < arrEnd) {
+        temp[tempIndex++] = array[j++];  //将左边剩余元素 按升序合并进临时数组
+    }
+
+    for ((tempIndex = 0, i = arrStart); (tempIndex < arrLen && i < arrEnd); (++tempIndex, ++i)) {
+        array[i] = temp[tempIndex];    //将临时数组中排序好的元素赋给原数组 
+    }
+
+    delete []temp;   //释放临时数组的空间 
+    temp = NULL;
+
+    return true;
+}
+bool mergeSort(int array[], size_t arrStart, size_t arrEnd) {
+    int arrLen = arrEnd - arrStart;   //求数组长度 
+    if (arrLen < 0) {  //检查输入是否正确 
+        cout << "Please check your input." << endl;
+        return false;
+    }
+
+    if (arrLen == 0 || arrLen == 1) {
+        return true;
+    } 
+
+    int middle = arrStart + floor(arrLen / 2);  //求数组的中间位置 
+
+    mergeSort(array, arrStart, middle);//将左边的数组归并排序 
+    mergeSort(array, middle, arrEnd);//将右边的数组归并排序 
+    return merge(array, arrStart, middle, arrEnd);//将两个有序的子数列合并 
+}
+
+void printArray(int array[], int arrLen) { //用于输出数组的函数 
+    for (int i = 0; i < arrLen; ++i) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+int main()
+{
+	int a[10] = {6,423,613,152,61,34,87,5,312,94};
+	int length = sizeof(a)/sizeof(int);
+	cout << "排序前：" << endl;
+	printArray(a,length);
+	mergeSort(a,0,length);
+	cout << "\n\n排序后(归并排序)：" << endl;
+	printArray(a,length);
+	return 0;
+}
