@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cstdio>
+using namespace std;
+void SelectionSort(int *,int);
+void input(int *,int);
+int main()
+{
+	int a[10] = {1,43,53,12,6,34,587,15,12,34};
+	int length = sizeof(a)/sizeof(int);
+	cout << "排序前：" << endl;
+	input(a,length);
+	SelectionSort(a,length);
+	cout << "\n\n排序后(选择排序)：" << endl;
+	input(a,length);
+	return 0;
+}
+void SelectionSort(int a[], int length)
+{
+    for (int i = 0; i < length - 1; i++) 
+	{
+        int min = i;//假设该下标对应值为最小值，记录其下标 
+        for (int j = i + 1; j < length; j++)
+        {
+        	if (a[min] > a[j])  
+        	{
+        		min = j;   //寻找数组中比假设的值还小的数，并记录下标 
+        	} 
+        }           
+        int temp = a[min];
+        a[min] = a[i];
+        a[i] = temp;
+    }
+}
+void input(int *a,int length)  //用于输出数组的函数 
+{
+	for(int i = 0;i < length;i++)
+	{
+		cout << a[i] << "\t";
+	}
+}
